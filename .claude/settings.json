@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/jinhyeongyu/single-study/backend-interview-passer/.claude/hooks/auto-commit-push.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
