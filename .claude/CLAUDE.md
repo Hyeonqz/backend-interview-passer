@@ -1,6 +1,6 @@
 # CLAUDE
 
-너는 내가 이직 준비를 하는 과정에서 문서 작성과 기술 면접 연습을 도와주는 조력자야.
+---
 
 ## 프로젝트 구조
 
@@ -9,50 +9,203 @@
 ├── agents/
 │   └── interview-simulator.md  # 기술 면접 시뮬레이터 agent
 ├── interview-logs/             # 면접 세션 기록 (자동 생성)
+│   ├── .last_session           # 마지막 세션 타임스탬프 (자동 갱신)
 │   └── YYYYMMDD_{score}.md
 ├── resume.md                   # 이력서 (면접 시작 전 작성 필요)
+├── resume.pdf                   # 이력서 (면접 시작 전 작성 필요)
 ├── jd.md                       # 채용 공고 (면접 시작 전 작성 필요)
 └── CLAUDE.md
+기술면접/
+인성,컬쳐핏 면접/
+이력서 작성 가이드/
+기타/
 ```
+
+---
 
 ## Workflow
 
 ### 문서 작성
-- markdown 문법 오류를 항상 찾아주고, 문서를 수정해줘야해
-  - 문서의 내용을 정확하고 명확하게 작성해줘야해
+- markdown 문법 오류를 항상 찾아주고 수정해줘야 한다.
+- 문서의 내용은 정확하고 명확하게 작성해야 한다.
 
-### 면접 시뮬레이션 (`interview-simulator` agent)
+### 면접 시뮬레이션
 
-면접 연습은 `interview-simulator` agent가 담당한다. 아래 흐름으로 진행된다.
+면접 연습은 `interview-simulator` agent가 담당한다.
 
 #### 사전 준비
 면접 시작 전 아래 두 파일을 작성해야 한다.
-- `.claude/resume.md` — 이력서
+- `.claude/resume.md` — 이력서md
+- `.claude/resume.pdf` — 이력서pdf
 - `.claude/jd.md` — 지원할 채용 공고
 
 #### 면접 시작
 - "면접 시작", "면접 연습", "start interview" 등의 요청 시 agent가 자동 트리거된다.
-- agent는 `resume.md`와 `jd.md`를 로드한 뒤, 이전 면접 기록(`.claude/interview-logs/`)도 불러와 연속성을 유지한다.
-
-#### 4일 로테이션 커리큘럼
-
-| Day | 커버 영역 |
-|-----|-----------|
-| 1 | Kafka 아키텍처, Redis 캐시 설계, Java 기본기 (동시성·메모리) |
-| 2 | Spring Boot (트랜잭션·AOP·Bean), JPA (영속성 컨텍스트·N+1·Lazy Loading), 아웃박스 패턴 |
-| 3 | DDD 도메인 설계, 성능 개선 경험, 장애 대응 |
-| 4 | 종합 설계 문제, SDV/IVI 도메인, 컬처핏 |
-
-#### 답변 평가 기준
-
-| 항목 | 비중 |
-|------|------|
-| 기술 정확도 | 35% |
-| 설계 판단력 및 트레이드오프 인식 | 30% |
-| 실무 경험 연결 | 20% |
-| 커뮤니케이션 명확성 | 15% |
+- agent는 `resume.md`, `resume.pdf`, `jd.md`, 이전 면접 기록(`.claude/interview-logs/`)을 로드한 뒤 연속성을 유지하며 진행한다.
 
 #### 면접 종료
-- "면접 끝" 입력 시 영역별 점수 및 총평을 출력한다.
-- 면접 기록은 `.claude/interview-logs/{YYYYMMDD}_{score}.md`로 자동 저장된다.
-- 전일 대비 성장 여부와 내일 보완 포인트를 함께 제공한다.
+- "면접 끝" 입력 시 점수 출력 → 기술면접 문서 목록 출력 → 로그 저장 → 누적 트래킹 순서로 실행된다.
+- 상세 절차는 `interview-simulator.md` 참고.
+
+---
+
+## 기술 기본기 질문 문서화 규칙
+
+면접 진행 중 **기술 기본기 질문**이 나오면 아래 규칙에 따라 반드시 문서를 생성하거나 업데이트해야 한다.
+
+### 1. 저장 경로
+
+```
+기술면접/{섹터}/{파일명}.md
+```
+
+섹터 분류 기준:
+
+| 섹터 | 경로 |
+|------|------|
+| Java | `기술면접/Java/` |
+| Spring Boot | `기술면접/Spring/` |
+| JPA | `기술면접/JPA/` |
+| Kafka | `기술면접/Kafka/` |
+| Redis | `기술면접/Redis/` |
+| 데이터베이스 | `기술면접/Database/` |
+| 네트워크 | `기술면접/Network/` |
+| 운영체제 | `기술면접/OS/` |
+
+### 2. 파일명 규칙
+
+```
+{주제_요약}.md
+```
+
+예시: `Transactional_동작원리.md`, `JPA_N+1_문제.md`, `Kafka_파티션_설계.md`
+
+### 3. 파일 내부 구조
+
+질문과 꼬리 질문은 **하나의 파일**에 Q1, Q2, Q3... 순서로 누적 작성한다.
+
+````markdown
+## Q1) {질문 주제 요약}
+> {면접관이 실제로 한 질문 원문}
+
+## A1) 내 답변
+{사용자가 실제로 한 답변을 그대로 기록}
+
+## 모범 답변
+{정확한 개념 설명 + 필요 시 코드 예시 포함}
+
+---
+
+## Q2) {꼬리 질문 주제 요약}
+> {면접관이 실제로 한 꼬리 질문 원문}
+
+## A2) 내 답변
+{사용자가 실제로 한 답변을 그대로 기록}
+
+## 모범 답변
+{정확한 개념 설명 + 필요 시 코드 예시 포함}
+````
+
+### 4. 파일 생성 및 업데이트 타이밍
+
+| 상황 | 동작 |
+|------|------|
+| 해당 주제 파일이 없는 경우 | 새 파일 생성 후 Q1으로 작성 시작 |
+| 해당 주제 파일이 이미 있는 경우 | 기존 파일 하단에 Q(N+1)로 꼬리 질문 추가 |
+| 사용자가 모른다고 한 경우 | `## A) 내 답변` 항목을 `모름`으로 기록 후 모범 답변 작성 |
+
+### 5. 기술 기본기 질문 판별 기준
+
+아래에 해당하면 기술 기본기 질문으로 판별하고 문서를 생성한다.
+
+- 특정 기술의 **내부 동작 원리** 질문 (예: `@Transactional은 어떻게 동작하나요?`)
+- **개념 차이** 질문 (예: `REQUIRED vs REQUIRES_NEW 차이는?`)
+- **자료구조 / 알고리즘 / OS / 네트워크** 관련 질문
+- **특정 에러 또는 현상의 원인** 질문 (예: `N+1 문제가 발생하는 이유는?`)
+
+프로젝트 경험 기반의 설계/판단 질문은 기본기 질문이 아니므로 문서 생성 대상이 아니다.
+
+### 6. 작성 예시
+
+파일 경로: `기술면접/Spring/Transactional_동작원리.md`
+
+````markdown
+## Q1) @Transactional 내부 메서드 호출 시 동작하지 않는 이유
+> @Transactional을 같은 클래스 내부 메서드에서 호출하면 트랜잭션이 동작하지 않는 이유는 무엇인가요?
+
+## A1) 내 답변
+모름
+
+## 모범 답변
+Spring의 @Transactional은 AOP 프록시 기반으로 동작한다.
+외부에서 Bean을 호출할 때는 프록시 객체를 통해 트랜잭션이 적용되지만,
+같은 클래스 내부에서 `this.method()`로 호출하면 프록시를 거치지 않고
+실제 객체를 직접 호출하기 때문에 트랜잭션이 동작하지 않는다.
+
+해결 방법:
+1. 메서드를 별도 클래스(Bean)로 분리
+2. ApplicationContext에서 자기 자신의 프록시를 주입받아 호출
+3. `@Transactional(propagation = Propagation.REQUIRES_NEW)`를 별도 Bean에 위임
+
+---
+
+## Q2) @Transactional 전파 레벨 REQUIRED vs REQUIRES_NEW 차이
+> REQUIRED와 REQUIRES_NEW의 차이를 설명하고, 결제 시스템에서 REQUIRES_NEW가 유용한 케이스는?
+
+## A2) 내 답변
+REQUIRED는 기존 트랜잭션이 있으면 참여하고 없으면 새로 생성한다.
+REQUIRES_NEW는 기존 트랜잭션 유무와 관계없이 항상 새로운 트랜잭션을 생성하며,
+기존 트랜잭션은 일시 중단된다.
+결제 시스템에서는 감사 로그(Audit Log) 저장 시 유용하다.
+메인 트랜잭션이 롤백되더라도 감사 로그는 반드시 저장되어야 하기 때문이다.
+
+## 모범 답변
+REQUIRED: 부모 트랜잭션이 존재하면 합류, 없으면 신규 생성.
+부모 트랜잭션과 같은 커넥션을 공유하므로 내부 메서드 예외 발생 시
+부모 트랜잭션까지 rollback-only로 마킹된다.
+
+REQUIRES_NEW: 항상 독립적인 신규 트랜잭션 생성.
+기존 트랜잭션은 suspend되고 별도 DB 커넥션을 사용한다.
+내부 메서드의 커밋/롤백이 부모 트랜잭션에 영향을 주지 않는다.
+
+결제 시스템에서 REQUIRES_NEW가 유용한 케이스:
+
+1. 감사 로그(Audit Log) 저장
+  - 결제 실패로 메인 트랜잭션이 롤백되어도 로그는 반드시 남겨야 함
+  - REQUIRES_NEW로 분리하면 메인 롤백과 무관하게 로그 커밋 가능
+
+2. 결제 실패 알림 이벤트 발행
+  - 메인 트랜잭션 롤백 여부와 무관하게 실패 알림은 발송되어야 함
+
+⚠️ 주의사항:
+REQUIRES_NEW는 DB 커넥션을 추가로 점유하므로 남용 시
+HikariCP 커넥션 풀 고갈 위험이 있다. 꼭 필요한 경우에만 사용한다.
+
+```java
+@Service
+@RequiredArgsConstructor
+public class PaymentService {
+
+    private final AuditLogService auditLogService;
+
+    @Transactional
+    public void processPayment(PaymentRequest request) {
+        try {
+            doPayment(request);
+        } catch (Exception e) {
+            auditLogService.saveFailLog(request, e);
+            throw e;
+        }
+    }
+}
+
+@Service
+public class AuditLogService {
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void saveFailLog(PaymentRequest request, Exception e) {
+        auditLogRepository.save(AuditLog.fail(request, e));
+    }
+}
+```
+````
