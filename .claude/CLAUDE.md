@@ -144,7 +144,7 @@ Spring의 @Transactional은 AOP 프록시 기반으로 동작한다.
 
 ---
 
-## Q2) @Transactional 전파 레벨 REQUIRED vs REQUIRES_NEW 차이
+## Q2: @Transactional 전파 레벨 REQUIRED Vs REQUIRES_NEW 차이
 > REQUIRED와 REQUIRES_NEW의 차이를 설명하고, 결제 시스템에서 REQUIRES_NEW가 유용한 케이스는?
 
 ## A2) 내 답변
@@ -169,38 +169,11 @@ REQUIRES_NEW: 항상 독립적인 신규 트랜잭션 생성.
   - 결제 실패로 메인 트랜잭션이 롤백되어도 로그는 반드시 남겨야 함
   - REQUIRES_NEW로 분리하면 메인 롤백과 무관하게 로그 커밋 가능
 
-2. 결제 실패 알림 이벤트 발행
+1. 결제 실패 알림 이벤트 발행
   - 메인 트랜잭션 롤백 여부와 무관하게 실패 알림은 발송되어야 함
 
 ⚠️ 주의사항:
 REQUIRES_NEW는 DB 커넥션을 추가로 점유하므로 남용 시
 HikariCP 커넥션 풀 고갈 위험이 있다. 꼭 필요한 경우에만 사용한다.
 
-```java
-@Service
-@RequiredArgsConstructor
-public class PaymentService {
-
-    private final AuditLogService auditLogService;
-
-    @Transactional
-    public void processPayment(PaymentRequest request) {
-        try {
-            doPayment(request);
-        } catch (Exception e) {
-            auditLogService.saveFailLog(request, e);
-            throw e;
-        }
-    }
-}
-
-@Service
-public class AuditLogService {
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveFailLog(PaymentRequest request, Exception e) {
-        auditLogRepository.save(AuditLog.fail(request, e));
-    }
-}
-```
 ````
