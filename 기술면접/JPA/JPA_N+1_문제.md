@@ -159,3 +159,44 @@ ToOne 관계  → Fetch Join + 페이징 안전 (row 수 변화 없음)
 ToMany 관계 → Fetch Join + 페이징 위험 (row 뻥튀기로 페이징 기준 깨짐)
               → Batch Size 또는 DTO Projection으로 해결
 ```
+
+
+### 개념 정리
+```text
+N+1 발생 원인:
+Lazy Loading 기본 전략 때문에
+부모 엔티티 1건 조회 후 → 연관 자식 엔티티 N건 개별 조회
+→ 총 1 + N번 쿼리 발생
+
+ex) 가맹점 10개 조회 후 각 가맹점의 거래내역 조회
+→ SELECT * FROM merchant (1번)
+→ SELECT * FROM transaction WHERE merchant_id=1 (N번)
+→ 총 11번 쿼리
+
+
+[해결 방법 비교]
+
+fetch join:
+JPQL에 직접 JOIN FETCH 명시
+@Query("SELECT m FROM Merchant m JOIN FETCH m.transactions")
+
+장점: 명시적, 복잡한 조건 제어 가능
+단점: JPQL을 직접 작성해야 함
+      Pageable과 함께 쓰면 메모리에서 페이징 처리 (위험)
+
+
+@EntityGraph:
+어노테이션으로 fetch join을 선언적으로 표현
+메서드 이름 기반 쿼리에서도 사용 가능
+
+@EntityGraph(attributePaths = {"transactions"})
+List<Merchant> findAll();
+
+장점: JPQL 없이 적용 가능, 가독성 좋음
+단점: 복잡한 조건 제어 어려움
+
+
+선택 기준:
+복잡한 조건 + 커스텀 쿼리 필요 → fetch join
+단순 연관관계 로딩만 필요     → @EntityGraph
+```
