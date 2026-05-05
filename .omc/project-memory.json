@@ -63,6 +63,12 @@
   },
   "hotPaths": [
     {
+      "path": ".claude/skills/cover-letter-writer/SKILL.md",
+      "accessCount": 2,
+      "lastAccessed": 1777994454976,
+      "type": "file"
+    },
+    {
       "path": ".claude/resume.md",
       "accessCount": 1,
       "lastAccessed": 1777993868467,
@@ -72,12 +78,6 @@
       "path": ".claude/resume/career.html",
       "accessCount": 1,
       "lastAccessed": 1777993868556,
-      "type": "file"
-    },
-    {
-      "path": ".claude/skills/cover-letter-writer/SKILL.md",
-      "accessCount": 1,
-      "lastAccessed": 1777994176647,
       "type": "file"
     },
     {
