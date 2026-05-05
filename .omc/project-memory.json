@@ -73,6 +73,12 @@
       "accessCount": 1,
       "lastAccessed": 1777993868556,
       "type": "file"
+    },
+    {
+      "path": ".claude/skills/cover-letter-writer/SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1777994176647,
+      "type": "file"
     }
   ],
   "userDirectives": []
