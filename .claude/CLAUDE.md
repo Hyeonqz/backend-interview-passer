@@ -14,7 +14,7 @@
 │   └── YYYYMMDD_{score}.md
 ├── RESUME.md                   # 이력서 (면접 시작 전 작성 필요)
 ├── JD.md                       # 채용 공고 (면접 시작 전 작성 필요)
-└── CLAUDE.md
+└── CLAUDE.md                   # CLAUDE 작동 Workflow 관리
 기술면접/
 인성,컬쳐핏 면접/
 이력서 작성 가이드/
@@ -29,13 +29,15 @@
 면접 연습은 `interview-simulator` agent가 담당한다.
 
 #### 사전 준비
-면접 시작 전 아래 두 파일을 작성해야 한다.
+면접 시작 전 아래 파일을 참고해야 한다.
 - `.claude/RESUME.md` — 이력서md
+- `.claude/resume/resume.html` — 이력서
+- `.claude/resume/career.html` — 경력기술서
 - `.claude/JD.md` — 지원한 채용 공고
 
 #### 면접 시작
 - "면접 시작", "면접 연습", "start interview" 등의 요청 시 agent가 자동 트리거된다.
-- agent는 `resume.md`, `resume.pdf`, `jd.md`, 이전 면접 기록(`.claude/interview-logs/`)을 로드한 뒤 연속성을 유지하며 진행한다.
+- agent는 `RESUME.md`, `resume.html`, `career.html`, `JD.md`, 이전 면접 기록(`.claude/interview-logs/`)을 로드한 뒤 연속성을 유지하며 진행한다.
 
 #### 면접 종료
 - "면접 끝" 입력 시 점수 출력 → 기술면접 문서 목록 출력 → 로그 저장 → 누적 트래킹 순서로 실행된다.
