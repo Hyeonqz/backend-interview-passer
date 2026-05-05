@@ -1,0 +1,10 @@
+.idea/
+.gitignore
+*.iml
+
+# 개인정보 보호
+.claude/interview-logs/
+.claude/settings.local.json
+
+# OMC 내부 상태 파일
+.omc/
