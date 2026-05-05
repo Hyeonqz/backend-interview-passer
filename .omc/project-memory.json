@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1777993523216,
+  "projectRoot": "/Users/jinhyeongyu/single-study/backend-interview-passer",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "기술면접": {
+      "path": "기술면접",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1777993523204,
+      "keyFiles": []
+    },
+    "기타": {
+      "path": "기타",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1777993523204,
+      "keyFiles": []
+    },
+    "이력서 작성 가이드": {
+      "path": "이력서 작성 가이드",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1777993523205,
+      "keyFiles": []
+    },
+    "인성,컬쳐핏 면접": {
+      "path": "인성,컬쳐핏 면접",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1777993523206,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": ".claude/resume.md",
+      "accessCount": 1,
+      "lastAccessed": 1777993868467,
+      "type": "file"
+    },
+    {
+      "path": ".claude/resume/career.html",
+      "accessCount": 1,
+      "lastAccessed": 1777993868556,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

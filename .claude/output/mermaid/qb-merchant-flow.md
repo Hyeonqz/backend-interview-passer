@@ -61,3 +61,28 @@ sequenceDiagram
         end
     end
 ```
+
+```mermaid
+---
+config:
+  theme: mc
+---
+sequenceDiagram
+    participant U as User
+    participant W as Was
+    participant R as RDB
+    participant F as File Server
+
+    U->>W: 1. 가맹점 접수 신청
+    W->>R: 2. DB 저장 + Outbox 저장(PENDING)<br/>단일 트랜잭션
+    W-->>U: 3. 접수 성공 응답
+    W-)F: 4. 비동기 파일 업로드 (로컬 임시저장 후 전송)
+
+    alt ✅ 업로드 성공
+        F-->>W: 완료
+        W->>R: Outbox status = COMPLETED
+    else ❌ 업로드 실패 (5회 지수 백오프)
+        W->>R: Outbox status = FAILED
+        Note over W,R: 30분 배치: PENDING/FAILED 자동 재처리<br/>최종 실패 시 운영팀 알림
+    end
+```

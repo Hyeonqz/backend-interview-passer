@@ -38,7 +38,7 @@ sequenceDiagram
 ```
 
 
-## QB Gateway-TO-BE
+## TO-BE flow
 ```mermaid
 ---
 config:
@@ -57,55 +57,23 @@ sequenceDiagram
     participant DB
 
     User->>POS: 1. QR 스캔 결제 요청
-    activate POS
     POS->>QB: 2. 결제 승인 요청
-    activate QB
-    QB->>Pay: 3. 간편결제사 승인 요청
-    activate Pay
+    QB->>Pay: 3. 승인 요청
     Pay-->>QB: 4. 승인 완료
-    deactivate Pay
-    QB->>DB: 5. 거래 상태 저장<br/>(APPROVED)
-    activate DB
-    DB-->>QB: 저장 완료
-    deactivate DB
-
+    QB->>DB: 5. 거래 상태 저장 (APPROVED)
     QB-->>POS: 6. 승인 응답
-    deactivate QB
-    alt ⭕️ Final API 호출 성공 Case
-        POS->>QB: 7. 결제 완료 통보 API
-        activate QB
-        
-        QB->>DB: 8. POS 거래 완료 상태 업데이트
-        activate DB
-        DB-->>QB: UPDATE
-        deactivate DB
-        
+
+    alt ✅ 정상 Case: Final API 호출
+        POS->>QB: 7. 결제 완료 통보 (Final API)
+        QB->>DB: 8. 거래 완료 상태 업데이트
         QB-->>POS: 9. 확인 완료
-        deactivate QB
-        
         POS->>User: 10. 결제 완료 안내
-        
-        Note over User: ✅ 정상 처리<br/>• 큐뱅: 결제 완료<br/>• POS: 결제 완료<br/>• User: 결제 완료
-        
-    else ❌ Final API 실패 Case
-        Note over QB: 11. 1분 단위 배치 감지<br/>(Final API 미호출 거래)
-        activate QB
-        
+
+    else ❌ 비정상 Case: Final API 미호출
+        Note over QB: 11. 2분 배치 감지 (Final API 미수신)
         QB->>Pay: 12. 자동 취소 요청
-        activate Pay
         Pay-->>QB: 13. 취소 완료
-        deactivate Pay
-        
-        QB->>DB: 14. 거래 상태 업데이트<br/>(CANCELLED)
-        activate DB
-        DB-->>QB: 상태 업데이트 완료
-        deactivate DB
-        
-        deactivate QB
-        
-        Note over QB,DB: ⚠️ 비정상 거래 자동 취소 처리 완료<br/>CS 발생 방지
+        QB->>DB: 14. 거래 상태 (CANCELLED)
+        Note over QB: ⚠️ 비정상 거래 자동 취소 완료
     end
-    deactivate POS
 ```
-
-

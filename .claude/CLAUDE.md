@@ -6,14 +6,14 @@
 
 ```
 .claude/
+├── skills/
 ├── agents/
 │   └── interview-simulator.md  # 기술 면접 시뮬레이터 agent
 ├── interview-logs/             # 면접 세션 기록 (자동 생성)
 │   ├── .last_session           # 마지막 세션 타임스탬프 (자동 갱신)
 │   └── YYYYMMDD_{score}.md
-├── resume.md                   # 이력서 (면접 시작 전 작성 필요)
-├── resume.pdf                   # 이력서 (면접 시작 전 작성 필요)
-├── jd.md                       # 채용 공고 (면접 시작 전 작성 필요)
+├── RESUME.md                   # 이력서 (면접 시작 전 작성 필요)
+├── JD.md                       # 채용 공고 (면접 시작 전 작성 필요)
 └── CLAUDE.md
 기술면접/
 인성,컬쳐핏 면접/
@@ -30,9 +30,8 @@
 
 #### 사전 준비
 면접 시작 전 아래 두 파일을 작성해야 한다.
-- `.claude/resume.md` — 이력서md
-- `.claude/resume.pdf` — 이력서pdf
-- `.claude/jd.md` — 지원할 채용 공고
+- `.claude/RESUME.md` — 이력서md
+- `.claude/JD.md` — 지원한 채용 공고
 
 #### 면접 시작
 - "면접 시작", "면접 연습", "start interview" 등의 요청 시 agent가 자동 트리거된다.
