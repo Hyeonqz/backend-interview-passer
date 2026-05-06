@@ -1,5 +1,9 @@
 # 본인의 이력서를 마크다운화 해서 작성합니다.
 
+> 추가적으로 자세한 내용은 아래 링크를 참조하세요 <br>
+> [1.이력서](resume/resume.html) <br>
+> [2.경력기술서](resume/career.html)
+
 # Resume
 
 ---
