@@ -5,6 +5,7 @@
 # 개인정보 보호
 .claude/interview-logs/
 .claude/settings.local.json
+기업조사/
 
 # OMC 내부 상태 파일
 .omc/
